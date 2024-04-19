@@ -1,0 +1,48 @@
+spring:
+  datasource:
+    url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5433/bank}
+    username: ${JDBC_DATABASE_USERNAME:postgres}
+    password: ${JDBC_DATABASE_PASSWORD:P4ssword!}
+    dbcp2:
+      max-wait-millis: 30000
+      validation-query: SELECT 1
+      validation-query-timeout: 30
+
+  mybatis:
+    type-aliases-package: io.tuum.bank.base.domain
+    mapper-locations: classpath:/mappers/**/*.xml
+    configuration:
+      map-underscore-to-camel-case: true
+      default-fetch-size: 100
+      default-statement-timeout: 30
+  liquibase:
+    change-log: classpath:domain/changelog-master.yml
+    drop-first: false
+  docker:
+    compose:
+      lifecycle-management: start-only
+error:
+  handling:
+    http-status-in-json-response: true
+    exception-logging: NO_LOGGING
+    full-stacktrace-http-statuses: 5xx
+    log-levels:
+      5xx: ERROR
+    codes:
+      CurrencyCodeUnique: CURRENCY_CODE_UNIQUE
+      CurrencyNameUnique: CURRENCY_NAME_UNIQUE
+      AccountCountryUnique: ACCOUNT_COUNTRY_UNIQUE
+      CountryCodeUnique: COUNTRY_CODE_UNIQUE
+      CountryIsoNumericUnique: COUNTRY_ISO_NUMERIC_UNIQUE
+      BalanceCurrencyUnique: BALANCE_CURRENCY_UNIQUE
+      TransactionCurrencyUnique: TRANSACTION_CURRENCY_UNIQUE
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,logfile,integrationgraph,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+springdoc:
+  pathsToMatch: /api/**

@@ -1,0 +1,159 @@
+databaseChangeLog:
+  - changeSet:
+      id: bank-initial
+      author: grigorjev.ilja@gmail.com
+      changes:
+        - createTable:
+            tableName: currency
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: code
+                  type: character varying(10)
+              - column:
+                  name: name
+                  type: character varying(255)
+              - column:
+                  name: symbol
+                  type: character varying(10)
+              - column:
+                  name: allowed
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date_created
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_updated
+                  type: timestamp
+                  constraints:
+                    nullable: false
+        - createTable:
+              tableName: account
+              columns:
+                - column:
+                    name: id
+                    type: bigserial
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                - column:
+                    name: customer_id
+                    type: bigint
+                    constraints:
+                      nullable: false
+                - column:
+                    name: country_id
+                    type: bigint
+                    constraints:
+                      nullable: false
+                - column:
+                    name: date_created
+                    type: timestamp
+                    constraints:
+                      nullable: false
+                - column:
+                    name: last_updated
+                    type: timestamp
+                    constraints:
+                      nullable: false
+        - createTable:
+            tableName: country
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: code
+                  type: character varying(3)
+              - column:
+                  name: name
+                  type: character varying(255)
+              - column:
+                  name: iso_numeric
+                  type: character varying(255)
+              - column:
+                  name: date_created
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_updated
+                  type: timestamp
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: balance
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: available_amount
+                  type: numeric(16, 2)
+              - column:
+                  name: account_id
+                  type: bigint
+              - column:
+                  name: currency_id
+                  type: bigint
+              - column:
+                  name: date_created
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_updated
+                  type: timestamp
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: transaction
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: amount
+                  type: numeric(16, 2)
+              - column:
+                  name: direction
+                  type: character varying(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: character varying(255)
+              - column:
+                  name: account_id
+                  type: bigint
+              - column:
+                  name: currency_id
+                  type: bigint
+              - column:
+                  name: date_created
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_updated
+                  type: timestamp
+                  constraints:
+                    nullable: false

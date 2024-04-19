@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: load-currencies-data
+      author: grigorjev.ilja@gmail.com
+      changes:
+        - loadData:
+            file: classpath:/changelogs/currency/2024-04-16_10-00-currencies.csv
+            tableName: currency

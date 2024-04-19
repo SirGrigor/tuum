@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: load-countries-data
+      author: grigorjev.ilja@gmail.com
+      changes:
+        - loadData:
+            file: classpath:/changelogs/country/2024-04-16_10-00-countries.csv
+            tableName: country

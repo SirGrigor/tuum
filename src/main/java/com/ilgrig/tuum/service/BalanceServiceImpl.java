@@ -4,7 +4,8 @@ import com.ilgrig.tuum.converter.BalanceConverter;
 import com.ilgrig.tuum.domain.Balance;
 import com.ilgrig.tuum.mapper.BalanceMapper;
 import com.ilgrig.tuum.mapper.CurrencyMapper;
-import com.ilgrig.tuum.model.BalanceDTO;
+import com.ilgrig.tuum.model.balance.CreationBalanceDTO;
+import com.ilgrig.tuum.model.balance.ResponseBalanceDTO;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
@@ -24,35 +25,27 @@ public class BalanceServiceImpl implements BalanceService {
 
 
     @Override
-    public List<BalanceDTO> findAll(final RowBounds rowBounds) {
-        final List<Balance> balances = balanceMapper.findAll(rowBounds);
+    public List<ResponseBalanceDTO> findAll() {
+        final List<Balance> balances = balanceMapper.findAll();
         return balances.stream()
-                .map(balanceConverter::toBalanceDTO)
+                .map(balanceConverter::balanceToResponseBalanceDTO)
                 .toList();
     }
 
     @Override
-    public BalanceDTO get(final Long id) {
+    public ResponseBalanceDTO get(final Long id) {
         return balanceMapper.findById(id)
-                .map(balanceConverter::toBalanceDTO)
+                .map(balanceConverter::balanceToResponseBalanceDTO)
                 .orElseThrow(NotFoundException::new);
     }
 
     @Override
-    public Long create(final BalanceDTO balanceDTO) {
-        Balance balance = balanceConverter.fromBalanceDTO(balanceDTO);
+    public Long create(final CreationBalanceDTO creationBalanceDTO) {
+        Balance balance = balanceConverter.creationBalanceDTOToBalance(creationBalanceDTO);
         balance.setDateCreated(OffsetDateTime.now());
         balance.setLastUpdated(OffsetDateTime.now());
         balanceMapper.insert(balance);
         return balance.getId();
-    }
-
-    @Override
-    public void update(final Long id, final BalanceDTO balanceDTO) {
-        final Balance balance = balanceMapper.findById(id)
-                .orElseThrow(NotFoundException::new);
-        balanceConverter.fromBalanceDTO(balanceDTO);
-        balanceMapper.update(balance);
     }
 
     @Override

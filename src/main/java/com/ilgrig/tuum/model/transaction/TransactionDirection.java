@@ -1,4 +1,4 @@
-package com.ilgrig.tuum.model;
+package com.ilgrig.tuum.model.transaction;
 
 
 public enum TransactionDirection {

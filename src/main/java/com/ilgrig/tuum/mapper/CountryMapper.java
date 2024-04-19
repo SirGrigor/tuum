@@ -20,6 +20,9 @@ public interface CountryMapper {
     @Select("SELECT * FROM country WHERE id = #{id}")
     Optional<Country> findById(Long id);
 
+    @Select("SELECT * FROM country WHERE code = #{code}")
+    Optional<Country> findByCode(String code);
+
     @Select("SELECT * FROM country")
     List<Country> findAll();
 

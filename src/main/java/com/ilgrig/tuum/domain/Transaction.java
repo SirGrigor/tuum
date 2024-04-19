@@ -1,6 +1,6 @@
 package com.ilgrig.tuum.domain;
 
-import com.ilgrig.tuum.model.TransactionDirection;
+import com.ilgrig.tuum.model.transaction.TransactionDirection;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

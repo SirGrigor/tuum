@@ -15,7 +15,7 @@ public interface BalanceMapper {
     Optional<Balance> findById(@Param("id") Long id);
 
     @Select("SELECT * FROM balance")
-    List<Balance> findAll(RowBounds rowBounds);
+    List<Balance> findAll();
 
     @Select("SELECT * FROM balance WHERE code = #{code}")
     boolean existsByCurrencyCode(String code);

@@ -22,6 +22,9 @@ public interface CurrencyMapper {
     @Select("SELECT * FROM currency WHERE id = #{id}")
     Optional<Currency> findById(@Param("id") Long id);
 
+    @Select("SELECT * FROM currency WHERE id = #{code}")
+    Optional<Currency> findByCode(@Param("code") String code);
+
     @Select("SELECT * FROM currency")
     List<Currency> findAll(RowBounds rowBounds);
 

@@ -3,7 +3,7 @@ package com.ilgrig.tuum.service;
 import com.ilgrig.tuum.converter.TransactionConverter;
 import com.ilgrig.tuum.domain.Transaction;
 import com.ilgrig.tuum.mapper.TransactionMapper;
-import com.ilgrig.tuum.model.TransactionDTO;
+import com.ilgrig.tuum.model.transaction.CreationTransactionDTO;
 import com.ilgrig.tuum.util.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
@@ -21,7 +21,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 
     @Override
-    public List<TransactionDTO> findAll(RowBounds rowBounds) {
+    public List<CreationTransactionDTO> findAll(RowBounds rowBounds) {
         final List<Transaction> transactions = transactionMapper.findAll(rowBounds);
         return transactions.stream()
                 .map(transactionConverter::toTransactionDTO)
@@ -29,15 +29,15 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionDTO get(final Long id) {
+    public CreationTransactionDTO get(final Long id) {
         return transactionMapper.findById(id)
                 .map(transactionConverter::toTransactionDTO)
                 .orElseThrow(NotFoundException::new);
     }
 
     @Override
-    public Long create(final TransactionDTO transactionDTO) {
-        final Transaction transaction = transactionConverter.fromTransactionDTO(transactionDTO);
+    public Long create(final CreationTransactionDTO creationTransactionDTO) {
+        final Transaction transaction = transactionConverter.fromTransactionDTO(creationTransactionDTO);
         transaction.setDateCreated(OffsetDateTime.now());
         transaction.setLastUpdated(OffsetDateTime.now());
         transactionMapper.insert(transaction);
@@ -45,8 +45,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void update(final Long id, final TransactionDTO transactionDTO) {
-        Transaction transaction = transactionConverter.fromTransactionDTO(transactionDTO);
+    public void update(final Long id, final CreationTransactionDTO creationTransactionDTO) {
+        Transaction transaction = transactionConverter.fromTransactionDTO(creationTransactionDTO);
         transaction.setLastUpdated(OffsetDateTime.now());
         transactionMapper.update(transaction);
     }

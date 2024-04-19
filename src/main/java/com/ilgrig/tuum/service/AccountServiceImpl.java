@@ -2,19 +2,19 @@ package com.ilgrig.tuum.service;
 
 import com.ilgrig.tuum.converter.AccountConverter;
 import com.ilgrig.tuum.domain.Account;
+import com.ilgrig.tuum.domain.Balance;
 import com.ilgrig.tuum.mapper.AccountMapper;
 import com.ilgrig.tuum.mapper.CountryMapper;
 import com.ilgrig.tuum.mapper.CurrencyMapper;
-import com.ilgrig.tuum.model.AccountDTO;
+import com.ilgrig.tuum.model.account.CreationAccountDTO;
+import com.ilgrig.tuum.model.account.ResponseAccountDTO;
+import com.ilgrig.tuum.util.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import com.ilgrig.tuum.util.NotFoundException;
 
 
 @RequiredArgsConstructor
@@ -27,36 +27,19 @@ public class AccountServiceImpl implements AccountService {
     private final CurrencyMapper currencyMapper;
 
     @Override
-    public List<AccountDTO> findAll(RowBounds rowBounds) {
-        List<Account> accounts = accountMapper.findAll(rowBounds);
-        return accounts.stream()
-                .map(accountConverter::toAccountDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public AccountDTO get(final Long id) {
+    public ResponseAccountDTO get(final Long id) {
         return accountMapper.findById(id)
-                .map(accountConverter::toAccountDTO)
+                .map(accountConverter::accountToResponseAccountDTO)
                 .orElseThrow(NotFoundException::new);
     }
 
     @Override
-    public Long create(final AccountDTO accountDTO) {
-        Account account = accountConverter.fromAccountDTO(accountDTO);
-        account.setDateCreated(OffsetDateTime.now());
-        account.setLastUpdated(OffsetDateTime.now());
+    public ResponseAccountDTO create(final CreationAccountDTO creationAccountDTO) {
+        Account account = accountConverter.creationAccountDTOToAccount(creationAccountDTO);
         accountMapper.insert(account);
-        return account.getId();
+        return accountConverter.accountToResponseAccountDTO(account);
     }
 
-    @Override
-    public void update(final Long id, final AccountDTO accountDTO) {
-        final Account account = accountMapper.findById(id)
-                .orElseThrow(NotFoundException::new);
-        accountConverter.fromAccountDTO(accountDTO);
-        accountMapper.insert(account);
-    }
 
     @Override
     public boolean countryExists(final String code) {

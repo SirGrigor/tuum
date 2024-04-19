@@ -1,6 +1,6 @@
 package com.ilgrig.tuum.service;
 
-import com.ilgrig.tuum.model.TransactionDTO;
+import com.ilgrig.tuum.model.transaction.CreationTransactionDTO;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface TransactionService {
 
-    List<TransactionDTO> findAll(RowBounds rowBounds);
+    List<CreationTransactionDTO> findAll(RowBounds rowBounds);
 
-    TransactionDTO get(Long id);
+    CreationTransactionDTO get(Long id);
 
-    Long create(TransactionDTO transactionDTO);
+    Long create(CreationTransactionDTO creationTransactionDTO);
 
-    void update(Long id, TransactionDTO transactionDTO);
+    void update(Long id, CreationTransactionDTO creationTransactionDTO);
 
     boolean existsByCurrencyCode(String code);
 }

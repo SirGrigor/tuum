@@ -1,6 +1,7 @@
 package com.ilgrig.tuum.service;
 
-import com.ilgrig.tuum.model.AccountDTO;
+import com.ilgrig.tuum.model.account.CreationAccountDTO;
+import com.ilgrig.tuum.model.account.ResponseAccountDTO;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -8,13 +9,9 @@ import java.util.List;
 
 public interface AccountService {
 
-    List<AccountDTO> findAll(RowBounds rowBounds);
+    ResponseAccountDTO get(Long id);
 
-    AccountDTO get(Long id);
-
-    Long create(AccountDTO accountDTO);
-
-    void update(Long id, AccountDTO accountDTO);
+    ResponseAccountDTO create(CreationAccountDTO creationAccountDTO);
 
     boolean countryExists(String code);
 

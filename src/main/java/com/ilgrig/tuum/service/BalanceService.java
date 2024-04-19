@@ -1,6 +1,7 @@
 package com.ilgrig.tuum.service;
 
-import com.ilgrig.tuum.model.BalanceDTO;
+import com.ilgrig.tuum.model.balance.CreationBalanceDTO;
+import com.ilgrig.tuum.model.balance.ResponseBalanceDTO;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -8,13 +9,11 @@ import java.util.List;
 
 public interface BalanceService {
 
-    List<BalanceDTO> findAll(RowBounds rowBounds);
+    List<ResponseBalanceDTO> findAll();
 
-    BalanceDTO get(Long id);
+    ResponseBalanceDTO get(Long id);
 
-    Long create(BalanceDTO balanceDTO);
-
-    void update(Long id, BalanceDTO balanceDTO);
+    Long create(CreationBalanceDTO creationBalanceDTO);
 
     boolean currencyExists(String code);
 

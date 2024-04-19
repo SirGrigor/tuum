@@ -10,9 +10,6 @@ import java.util.Optional;
 @Mapper
 public interface AccountMapper {
 
-    @Select("SELECT * FROM account")
-    List<Account> findAll(RowBounds rowBounds);
-
     @Select("SELECT * FROM account WHERE id = #{id}")
     Optional<Account> findById(@Param("id") Long id);
 
@@ -20,9 +17,6 @@ public interface AccountMapper {
             " VALUES (#{id}, #{customerId}, #{countryId}, #{dateCreated}, #{lastUpdated})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(Account account);
-
-    @Update("UPDATE account SET customer_id = #{customerId}, country_id = #{countryId} WHERE id = #{id}")
-    void update(Account account);
 
 }
 

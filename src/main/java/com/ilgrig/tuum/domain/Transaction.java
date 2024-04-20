@@ -18,13 +18,15 @@ public class Transaction {
 
     private BigDecimal amount;
 
-    private TransactionDirection direction;
+    private BigDecimal balanceAfterTransaction;
 
-    private String description;
+    private TransactionDirection direction;
 
     private Account account;
 
-    private Currency currency;
+    private String description;
+
+    private String currency;
 
     private OffsetDateTime dateCreated;
 

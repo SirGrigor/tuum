@@ -15,6 +15,4 @@ public interface BalanceService {
 
     Long create(CreationBalanceDTO creationBalanceDTO);
 
-    boolean currencyExists(String code);
-
 }

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Set;
 
 
 @Data
@@ -17,9 +18,15 @@ public class Balance {
 
     private BigDecimal availableAmount;
 
+    private BigDecimal incomingTotal;
+
+    private BigDecimal outgoingTotal;
+
     private Account account;
 
-    private Currency currency;
+    private String currency;
+
+    private Set<Transaction> transactions;
 
     private OffsetDateTime dateCreated;
 

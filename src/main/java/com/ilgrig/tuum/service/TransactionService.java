@@ -14,7 +14,4 @@ public interface TransactionService {
 
     Long create(CreationTransactionDTO creationTransactionDTO);
 
-    void update(Long id, CreationTransactionDTO creationTransactionDTO);
-
-    boolean existsByCurrencyCode(String code);
 }

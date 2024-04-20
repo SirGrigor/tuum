@@ -1,18 +1,19 @@
 package com.ilgrig.tuum.model.account;
 
-import com.ilgrig.tuum.mapper.CurrencyMapper;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
+import java.util.Currency;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-@AllArgsConstructor
-@RequiredArgsConstructor
 public class ValidCurrencyValidator implements ConstraintValidator<ValidCurrency, List<String>> {
 
-    private CurrencyMapper currencyMapper;
+    private static final Set<String> ALLOWED_CURRENCIES = Set.of("SEK", "USD", "EUR", "GBP");
+    private static final Set<String> ALL_AVAILABLE_CURRENCIES = Currency.getAvailableCurrencies().stream()
+            .map(Currency::getCurrencyCode)
+            .collect(Collectors.toSet());
 
     @Override
     public void initialize(ValidCurrency constraintAnnotation) {
@@ -23,11 +24,7 @@ public class ValidCurrencyValidator implements ConstraintValidator<ValidCurrency
         if (currencies == null || currencies.isEmpty()) {
             return false;
         }
-        return currencies.stream()
-                .allMatch(currency ->
-                        currency != null &&
-                                currency.matches("[A-Z]{3}") &&
-                                currencyMapper.existsByCode(currency)
-                );
+
+        return currencies.stream().allMatch(currency -> ALLOWED_CURRENCIES.contains(currency) && ALL_AVAILABLE_CURRENCIES.contains(currency));
     }
 }

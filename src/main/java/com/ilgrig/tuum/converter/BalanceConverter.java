@@ -5,23 +5,34 @@ import com.ilgrig.tuum.model.balance.CreationBalanceDTO;
 import com.ilgrig.tuum.model.balance.ResponseBalanceDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.Mappings;
+import org.mapstruct.factory.Mappers;
 
-
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring")
 public interface BalanceConverter {
 
-    @Mapping(source = "id", target = "id")
-    @Mapping(source = "availableAmount", target = "amount")
-    @Mapping(source = "currency.code", target = "currency")
-    ResponseBalanceDTO balanceToResponseBalanceDTO(Balance balance);
+    BalanceConverter INSTANCE = Mappers.getMapper(BalanceConverter.class);
 
-    @Mapping(source = "id", target = "id")
-    @Mapping(source = "availableAmount", target = "availableAmount")
-    @Mapping(source = "account", target = "account.id")
-    @Mapping(source = "currency", target = "currency.id")
-    Balance creationBalanceDTOToBalance(CreationBalanceDTO creationBalanceDTO);
+
+    @Mappings({
+            @Mapping(source = "id", target = "id"),
+            @Mapping(source = "availableAmount", target = "availableAmount"),
+            @Mapping(source = "currency", target = "currency")
+    })
+    ResponseBalanceDTO toResponseBalanceDTO(Balance balance);
+
+    @Mappings({
+            @Mapping(source = "id", target = "id"),
+            @Mapping(source = "availableAmount", target = "availableAmount"),
+            @Mapping(source = "currency", target = "currency"),
+            @Mapping(target = "account", ignore = true),
+            @Mapping(target = "incomingTotal", ignore = true),
+            @Mapping(target = "outgoingTotal", ignore = true),
+            @Mapping(target = "transactions", ignore = true),
+            @Mapping(target = "dateCreated", ignore = true),
+            @Mapping(target = "lastUpdated", ignore = true)
+    })
+    Balance toBalance(CreationBalanceDTO creationBalanceDTO);
 
 }
 

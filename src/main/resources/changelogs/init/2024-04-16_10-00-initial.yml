@@ -1,10 +1,15 @@
 databaseChangeLog:
   - changeSet:
-      id: bank-initial
+      id: tuum-initial
       author: grigorjev.ilja@gmail.com
       changes:
+        - createSequence:
+            cycle: false
+            incrementBy: 1
+            sequenceName: primary_sequence
+            startValue: 10000
         - createTable:
-            tableName: currency
+            tableName: account
             columns:
               - column:
                   name: id
@@ -13,86 +18,23 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: code
-                  type: character varying(10)
-              - column:
-                  name: name
-                  type: character varying(255)
-              - column:
-                  name: symbol
-                  type: character varying(10)
-              - column:
-                  name: allowed
-                  type: boolean
+                  name: customer_id
+                  type: bigint
                   constraints:
                     nullable: false
               - column:
-                  name: date_created
-                  type: timestamp
-                  constraints:
-                    nullable: false
-              - column:
-                  name: last_updated
-                  type: timestamp
-                  constraints:
-                    nullable: false
-        - createTable:
-              tableName: account
-              columns:
-                - column:
-                    name: id
-                    type: bigserial
-                    constraints:
-                      primaryKey: true
-                      nullable: false
-                - column:
-                    name: customer_id
-                    type: bigint
-                    constraints:
-                      nullable: false
-                - column:
-                    name: country_id
-                    type: bigint
-                    constraints:
-                      nullable: false
-                - column:
-                    name: date_created
-                    type: timestamp
-                    constraints:
-                      nullable: false
-                - column:
-                    name: last_updated
-                    type: timestamp
-                    constraints:
-                      nullable: false
-        - createTable:
-            tableName: country
-            columns:
-              - column:
-                  name: id
-                  type: bigserial
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: code
+                  name: country
                   type: character varying(3)
-              - column:
-                  name: name
-                  type: character varying(255)
-              - column:
-                  name: iso_numeric
-                  type: character varying(255)
+                  constraints:
+                    nullable: false
               - column:
                   name: date_created
-                  type: timestamp
-                  constraints:
-                    nullable: false
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
               - column:
                   name: last_updated
-                  type: timestamp
-                  constraints:
-                    nullable: false
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
         - createTable:
             tableName: balance
             columns:
@@ -105,22 +47,34 @@ databaseChangeLog:
               - column:
                   name: available_amount
                   type: numeric(16, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency
+                  type: character varying(3)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: incoming_total
+                  type: numeric(16, 2)
+                  defaultValue: 0
+              - column:
+                  name: outgoing_total
+                  type: numeric(16, 2)
+                  defaultValue: 0
               - column:
                   name: account_id
                   type: bigint
-              - column:
-                  name: currency_id
-                  type: bigint
+                  constraints:
+                    nullable: false
               - column:
                   name: date_created
-                  type: timestamp
-                  constraints:
-                    nullable: false
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
               - column:
                   name: last_updated
-                  type: timestamp
-                  constraints:
-                    nullable: false
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
         - createTable:
             tableName: transaction
             columns:
@@ -133,27 +87,60 @@ databaseChangeLog:
               - column:
                   name: amount
                   type: numeric(16, 2)
+                  constraints:
+                    nullable: false
               - column:
                   name: direction
-                  type: character varying(100)
+                  type: character varying(4)
                   constraints:
                     nullable: false
               - column:
                   name: description
                   type: character varying(255)
               - column:
+                  name: balance_after_transaction
+                  type: numeric(16, 2)
+                  constraints:
+                    nullable: false
+              - column:
                   name: account_id
                   type: bigint
+                  constraints:
+                    nullable: false
               - column:
-                  name: currency_id
+                  name: balance_id
                   type: bigint
+                  constraints:
+                    nullable: false
               - column:
                   name: date_created
-                  type: timestamp
-                  constraints:
-                    nullable: false
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
               - column:
                   name: last_updated
-                  type: timestamp
-                  constraints:
-                    nullable: false
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - addForeignKeyConstraint:
+            constraintName: fk_balance_account_id
+            baseTableName: balance
+            baseColumnNames: account_id
+            referencedTableName: account
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+        - addForeignKeyConstraint:
+            constraintName: fk_transaction_account_id
+            baseTableName: transaction
+            baseColumnNames: account_id
+            referencedTableName: account
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+        - addForeignKeyConstraint:
+            constraintName: fk_transaction_balance_id
+            baseTableName: transaction
+            baseColumnNames: balance_id
+            referencedTableName: balance
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE

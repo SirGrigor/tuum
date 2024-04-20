@@ -4,16 +4,14 @@ package com.ilgrig.tuum.model.account;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.AllArgsConstructor;
-import com.ilgrig.tuum.mapper.CountryMapper;
 import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
-@RequiredArgsConstructor
+import java.util.Arrays;
+import java.util.Locale;
 
 public class ValidCountryValidator implements ConstraintValidator<ValidCountry, String> {
 
-
-    private CountryMapper countryMapper;
+    private final String[] isoCountries = Locale.getISOCountries();
 
     @Override
     public void initialize(ValidCountry constraintAnnotation) {
@@ -21,9 +19,10 @@ public class ValidCountryValidator implements ConstraintValidator<ValidCountry, 
 
     @Override
     public boolean isValid(String countryValue, ConstraintValidatorContext context) {
-        if (countryValue == null || !countryValue.matches("[A-Z]{2}")) {
+        if (countryValue == null || countryValue.isEmpty()) {
             return false;
         }
-        return countryMapper.existsByCode(countryValue);
+
+        return Arrays.asList(this.isoCountries).contains(countryValue);
     }
 }

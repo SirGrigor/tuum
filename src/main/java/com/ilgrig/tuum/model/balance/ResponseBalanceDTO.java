@@ -19,7 +19,7 @@ public class ResponseBalanceDTO {
     @NotNull
     @Digits(integer = 18, fraction = 2)
     @Schema(description = "Available balance", example = "99.85")
-    BigDecimal amount;
+    BigDecimal availableAmount;
 
     @NotNull
     @Schema(description = "Currency code", example = "SEK")

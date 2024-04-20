@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping(value = "/api/transactions", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TransactionController {
 
-    private final TransactionService transactionService;
+//    private final TransactionService transactionService;
 
 //    @GetMapping
 //    public ResponseEntity<List<ResponseTransactionDTO>> getAllTransactions(

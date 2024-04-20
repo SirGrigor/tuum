@@ -17,7 +17,7 @@ public class Account {
 
     private Long customerId;
 
-    private Country country;
+    private String country;
 
     private Set<Balance> balances;
 

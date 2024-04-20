@@ -35,15 +35,5 @@ public interface AccountMapper {
     })
     Optional<Account> findAccountById(@Param("id") Long id);
 
-    @Select("SELECT id, available_amount, currency, date_created, last_updated " +
-            "FROM balance WHERE account_id = #{accountId}")
-    @Results({
-            @Result(property = "id", column = "id"),
-            @Result(property = "availableAmount", column = "available_amount"),
-            @Result(property = "currency", column = "currency"),
-            @Result(property = "dateCreated", column = "date_created"),
-            @Result(property = "lastUpdated", column = "last_updated")
-    })
-    Set<Balance> findBalancesByAccountId(@Param("accountId") Long accountId);
 }
 

@@ -26,8 +26,6 @@ public interface BalanceConverter {
             @Mapping(source = "availableAmount", target = "availableAmount"),
             @Mapping(source = "currency", target = "currency"),
             @Mapping(target = "account", ignore = true),
-            @Mapping(target = "incomingTotal", ignore = true),
-            @Mapping(target = "outgoingTotal", ignore = true),
             @Mapping(target = "transactions", ignore = true),
             @Mapping(target = "dateCreated", ignore = true),
             @Mapping(target = "lastUpdated", ignore = true)

@@ -15,7 +15,12 @@ import java.math.BigDecimal;
 @Setter
 public class CreationTransactionDTO {
 
-    private Long id;
+    private Long accountId;
+
+    @Schema(type = "string", example = "USD", allowableValues = {"SEK", "USD", "EUR", "GBP"})
+    @Size(min = 3, max = 3)
+    @NotNull
+    private String currency;
 
     @Digits(integer = 18, fraction = 2)
     @JsonFormat(shape = JsonFormat.Shape.STRING)
@@ -23,13 +28,12 @@ public class CreationTransactionDTO {
     private BigDecimal amount;
 
     @NotNull
+    @Schema(type = "string", example = "OUT", allowableValues = {"IN", "OUT"})
     private TransactionDirection direction;
 
     @Size(max = 255)
     private String description;
 
-    private Long account;
 
-    private Long currency;
 
 }

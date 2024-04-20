@@ -9,15 +9,11 @@ import java.util.Optional;
 
 @Mapper
 public interface TransactionMapper {
-    @Select("SELECT * FROM transaction WHERE id = #{id}")
-    Optional<Transaction> findById(@Param("id") Long id);
-
-    @Select("SELECT * FROM transaction")
-    List<Transaction> findAll(RowBounds rowBounds);
-
-    @Insert("INSERT INTO transaction (amount, currency_id, account_id, direction, date_created, last_updated)" +
-            " VALUES (#{amount}, #{currencyId}, #{accountId}, #{direction}, #{dateCreated}, #{lastUpdated})")
+    @Insert("INSERT INTO transaction (amount, currency, direction, description, account_id, balance_id) " +
+            "VALUES (#{amount}, #{currency}, #{direction}, #{description}, #{accountId}, #{balanceId})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(Transaction transaction);
 
+    @Select("SELECT * FROM transaction WHERE account_id = #{accountId}")
+    List<Transaction> findAllByAccountId(Long accountId);
 }

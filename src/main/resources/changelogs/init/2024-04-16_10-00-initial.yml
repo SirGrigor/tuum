@@ -55,14 +55,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: incoming_total
-                  type: numeric(16, 2)
-                  defaultValue: 0
-              - column:
-                  name: outgoing_total
-                  type: numeric(16, 2)
-                  defaultValue: 0
-              - column:
                   name: account_id
                   type: bigint
                   constraints:
@@ -90,6 +82,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: currency
+                  type: character varying(3)
+                  constraints:
+                    nullable: false
+              - column:
                   name: direction
                   type: character varying(4)
                   constraints:
@@ -97,11 +94,6 @@ databaseChangeLog:
               - column:
                   name: description
                   type: character varying(255)
-              - column:
-                  name: balance_after_transaction
-                  type: numeric(16, 2)
-                  constraints:
-                    nullable: false
               - column:
                   name: account_id
                   type: bigint

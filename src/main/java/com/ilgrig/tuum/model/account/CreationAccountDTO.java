@@ -21,7 +21,7 @@ public class CreationAccountDTO {
     private String country;
 
     @NotNull
-    @Schema(description = "List of currency codes", example = "[\"SEK\", \"USD\", \"EUR\", \"GBP\"]")
+    @Schema(description = "List of currency codes", example = "[\"SEK\", \"USD\", \"EUR\", \"GBP\"]", allowableValues = {"SEK", "USD", "EUR", "GBP"})
     @ValidCurrency
     private List<String> currencies;
 

@@ -27,7 +27,7 @@ public class AccountServiceImpl implements AccountService {
     public ResponseAccountDTO get(final Long id) {
         Account account = accountMapper.findAccountById(id)
                 .orElseThrow(() -> new AccountNotFoundException("No account found with ID: " + id));
-        Set<Balance> balances = accountMapper.findBalancesByAccountId(id);
+        Set<Balance> balances = balanceMapper.findBalancesByAccountId(id);
         account.setBalances(balances);
         return accountConverter.accountToResponseAccountDTO(account);
     }

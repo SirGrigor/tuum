@@ -22,6 +22,6 @@ public class CreationBalanceDTO {
 
     private Long account;
 
-    private Long currency;
+    private String currency;
 
 }

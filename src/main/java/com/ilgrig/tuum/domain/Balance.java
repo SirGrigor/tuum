@@ -1,8 +1,6 @@
 package com.ilgrig.tuum.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -17,10 +15,6 @@ public class Balance {
     private Long id;
 
     private BigDecimal availableAmount;
-
-    private BigDecimal incomingTotal;
-
-    private BigDecimal outgoingTotal;
 
     private Account account;
 

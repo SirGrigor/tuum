@@ -18,7 +18,7 @@ public interface BalanceService {
 
     Long create(CreationBalanceDTO creationBalanceDTO);
 
-    void updateBalance(Balance balance, BigDecimal amount, TransactionDirection direction);
+//    void updateBalance(Balance balance, BigDecimal amount, TransactionDirection direction);
 
     Balance findBalanceByAccountIdAndCurrency(Long accountId, String currency);
 }

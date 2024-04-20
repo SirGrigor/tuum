@@ -48,19 +48,19 @@ public class BalanceServiceImpl implements BalanceService {
         return balance.getId();
     }
 
-    @Transactional
-    @Override
-    public void updateBalance(Balance balance, BigDecimal amount, TransactionDirection direction) {
-        if (direction == TransactionDirection.IN) {
-            balance.setAvailableAmount(balance.getAvailableAmount().add(amount));
-        }
-
-        if (direction == TransactionDirection.OUT) {
-            balance.setAvailableAmount(balance.getAvailableAmount().subtract(amount));
-        }
-
-        balanceMapper.update(balance);
-    }
+//    @Transactional
+//    @Override
+//    public void updateBalance(Balance balance, BigDecimal amount, TransactionDirection direction) {
+//        if (direction == TransactionDirection.IN) {
+//            balance.setAvailableAmount(balance.getAvailableAmount().add(amount));
+//        }
+//
+//        if (direction == TransactionDirection.OUT) {
+//            balance.setAvailableAmount(balance.getAvailableAmount().subtract(amount));
+//        }
+//
+//        balanceMapper.update(balance);
+//    }
 
     @Override
     public Balance findBalanceByAccountIdAndCurrency(Long accountId, String currency) {

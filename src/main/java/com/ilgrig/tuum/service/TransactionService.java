@@ -12,12 +12,6 @@ import java.util.List;
 
 public interface TransactionService {
 
-    List<ResponseTransactionDTO> findAll(Long accountId, RowBounds rowBounds);
-
-    CreationTransactionDTO get(Long id);
-
-    ResponseTransactionDTO create(CreationTransactionDTO creationTransactionDTO);
-
     ResponseTransactionDTO createTransaction(CreationTransactionDTO dto);
 
     void updateBalance(Balance balance, BigDecimal amount, TransactionDirection direction);

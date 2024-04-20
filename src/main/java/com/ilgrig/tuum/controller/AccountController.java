@@ -4,6 +4,7 @@ import com.ilgrig.tuum.mapper.AccountMapper;
 import com.ilgrig.tuum.model.account.CreationAccountDTO;
 import com.ilgrig.tuum.model.account.ResponseAccountDTO;
 import com.ilgrig.tuum.service.AccountService;
+import com.ilgrig.tuum.util.AccountNotFoundException;
 import io.github.wimdeblauwe.errorhandlingspringbootstarter.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -30,10 +31,23 @@ public class AccountController {
     private final AccountMapper accountMapper;
 
 
+    @Operation(summary = "Retrieve an existing account by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Account retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "No account found with the given ID"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseAccountDTO> getAccount(@PathVariable(name = "id") final Long id) {
-        return ResponseEntity.ok(accountService.get(id));
+    public ResponseEntity<?> getAccount(@PathVariable(name = "id") final Long id) {
+        try {
+            ResponseAccountDTO account = accountService.get(id);
+            return ResponseEntity.ok(account);
+        } catch (AccountNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiErrorResponse(HttpStatus.NOT_FOUND, "Not Found", ex.getMessage()));
+        }
     }
+
 
     @Operation(summary = "Create a new account")
     @ApiResponses(value = {

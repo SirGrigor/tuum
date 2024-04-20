@@ -30,6 +30,7 @@ dependencies {
 	implementation 'io.github.wimdeblauwe:error-handling-spring-boot-starter:4.2.0'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 	implementation('org.mapstruct:mapstruct:1.5.5.Final')
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.2.5'
 	annotationProcessor('org.mapstruct:mapstruct-processor:1.5.5.Final')
 	annotationProcessor('org.projectlombok:lombok-mapstruct-binding:0.2.0')
 	compileOnly 'org.projectlombok:lombok'

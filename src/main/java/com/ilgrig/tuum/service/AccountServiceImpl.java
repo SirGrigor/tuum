@@ -7,13 +7,11 @@ import com.ilgrig.tuum.mapper.AccountMapper;
 import com.ilgrig.tuum.mapper.BalanceMapper;
 import com.ilgrig.tuum.model.account.CreationAccountDTO;
 import com.ilgrig.tuum.model.account.ResponseAccountDTO;
-import com.ilgrig.tuum.util.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
+import org.springframework.web.client.HttpClientErrorException;
 
 
 @RequiredArgsConstructor
@@ -28,7 +26,7 @@ public class AccountServiceImpl implements AccountService {
     public ResponseAccountDTO get(final Long id) {
         return accountMapper.findById(id)
                 .map(accountConverter::accountToResponseAccountDTO)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new HttpClientErrorException(org.springframework.http.HttpStatus.NOT_FOUND));
     }
 
     @Transactional

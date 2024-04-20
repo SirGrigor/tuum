@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import com.ilgrig.tuum.util.NotFoundException;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 
 @RequiredArgsConstructor
 @Service
@@ -34,7 +34,7 @@ public class BalanceServiceImpl implements BalanceService {
     public ResponseBalanceDTO get(final Long id) {
         return balanceMapper.findById(id)
                 .map(balanceConverter::toResponseBalanceDTO)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new HttpClientErrorException(org.springframework.http.HttpStatus.NOT_FOUND));
     }
 
     @Transactional

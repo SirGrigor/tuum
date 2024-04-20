@@ -19,8 +19,8 @@ public interface AccountMapper {
     @Update("UPDATE account SET customer_id = #{customerId}, country = #{country}, last_updated = #{lastUpdated} WHERE id = #{id}")
     void update(Account account);
 
-    @Select("SELECT * FROM account WHERE customer_id = #{customerId}")
-    Optional<Account> findByCustomerId(@Param("customerId") Long customerId);
+    @Select("SELECT EXISTS(SELECT 1 FROM account WHERE customer_id = #{customerId})")
+    boolean existsByCustomerId(Long customerId);
 
 }
 

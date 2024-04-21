@@ -4,6 +4,7 @@ import com.ilgrig.tuum.model.transaction.CreationTransactionDTO;
 import com.ilgrig.tuum.model.transaction.ResponseTransactionDTO;
 import com.ilgrig.tuum.service.TransactionService;
 import com.ilgrig.tuum.util.AccountNotFoundException;
+import com.ilgrig.tuum.util.CustomApiResponse;
 import com.ilgrig.tuum.util.InsufficientFundsException;
 import io.github.wimdeblauwe.errorhandlingspringbootstarter.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,10 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @RequiredArgsConstructor
 @RestController
@@ -34,42 +33,41 @@ public class TransactionController {
 
     @Operation(summary = "Create a new transaction")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Transaction created successfully"),
+            @ApiResponse(responseCode = "200", description = "Transaction created successfully", content = @Content(schema = @Schema(implementation = ResponseTransactionDTO.class))),
             @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
             @ApiResponse(responseCode = "404", description = "Account not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
             @ApiResponse(responseCode = "409", description = "Insufficient funds", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     @PostMapping
-    public ResponseEntity<?> createTransaction(@Valid @RequestBody CreationTransactionDTO creationDTO, BindingResult result) {
+    public ResponseEntity<CustomApiResponse<ResponseTransactionDTO>> createTransaction(@Valid @RequestBody CreationTransactionDTO creationDTO, BindingResult result) {
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors().stream()
                     .map(FieldError::getDefaultMessage)
                     .collect(Collectors.toList());
-            return ResponseEntity.badRequest().body(new ApiErrorResponse(HttpStatus.BAD_REQUEST, "Validation Error", String.join(", ", errors)));
+            ApiErrorResponse apiError = new ApiErrorResponse(HttpStatus.BAD_REQUEST, "Validation Error", String.join(", ", errors));
+            return ResponseEntity.badRequest().body(CustomApiResponse.error(apiError));
         }
 
         try {
             ResponseTransactionDTO response = transactionService.createTransaction(creationDTO);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(CustomApiResponse.success(response));
         } catch (AccountNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiErrorResponse(HttpStatus.NOT_FOUND, "Account not found", ex.getMessage()));
+            ApiErrorResponse apiError = new ApiErrorResponse(HttpStatus.NOT_FOUND, "Account not found", ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(CustomApiResponse.error(apiError));
         } catch (InsufficientFundsException ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new ApiErrorResponse(HttpStatus.CONFLICT, "Insufficient Funds", ex.getMessage()));
+            ApiErrorResponse apiError = new ApiErrorResponse(HttpStatus.CONFLICT, "Insufficient Funds", ex.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(CustomApiResponse.error(apiError));
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", ex.getMessage()));
+            ApiErrorResponse apiError = new ApiErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(CustomApiResponse.error(apiError));
         }
     }
 
     @GetMapping("/{accountId}")
-    public ResponseEntity<List<ResponseTransactionDTO>> getTransactionsByAccountId(@PathVariable Long accountId
-            , @RequestParam(defaultValue = "0") int offset
-            , @RequestParam(defaultValue = "10") int limit) {
+    public ResponseEntity<CustomApiResponse<List<ResponseTransactionDTO>>> getTransactionsByAccountId(@PathVariable Long accountId, @RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "10") int limit) {
         List<ResponseTransactionDTO> transactions = transactionService.findAllByAccountId(accountId, new RowBounds(offset, limit));
-        return ResponseEntity.ok(transactions);
+        return ResponseEntity.ok(CustomApiResponse.success(transactions));
     }
 
 }

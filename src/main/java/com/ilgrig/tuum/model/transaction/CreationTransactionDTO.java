@@ -29,7 +29,6 @@ public class CreationTransactionDTO {
     private BigDecimal amount;
 
     @Schema(type = "string", example = "USD", allowableValues = {"SEK", "USD", "EUR", "GBP"})
-    @Size(min = 3, max = 3)
     @NotNull
     private String currency;
 

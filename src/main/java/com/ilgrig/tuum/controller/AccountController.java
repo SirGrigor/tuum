@@ -5,6 +5,7 @@ import com.ilgrig.tuum.model.account.CreationAccountDTO;
 import com.ilgrig.tuum.model.account.ResponseAccountDTO;
 import com.ilgrig.tuum.service.AccountService;
 import com.ilgrig.tuum.util.AccountNotFoundException;
+import com.ilgrig.tuum.util.CustomApiResponse;
 import io.github.wimdeblauwe.errorhandlingspringbootstarter.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -38,13 +39,13 @@ public class AccountController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAccount(@PathVariable(name = "id") final Long id) {
+    public ResponseEntity<CustomApiResponse<ResponseAccountDTO>> getAccount(@PathVariable(name = "id") final Long id) {
         try {
             ResponseAccountDTO account = accountService.get(id);
-            return ResponseEntity.ok(account);
+            return ResponseEntity.ok(CustomApiResponse.success(account));
         } catch (AccountNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiErrorResponse(HttpStatus.NOT_FOUND, "Not Found", ex.getMessage()));
+            ApiErrorResponse errorResponse = new ApiErrorResponse(HttpStatus.NOT_FOUND, "Not Found", ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(CustomApiResponse.error(errorResponse));
         }
     }
 
@@ -57,19 +58,22 @@ public class AccountController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping
-    public ResponseEntity<?> createAccount(@Valid @RequestBody CreationAccountDTO creationAccountDTO, BindingResult result) {
+    public ResponseEntity<CustomApiResponse<ResponseAccountDTO>> createAccount(@Valid @RequestBody CreationAccountDTO creationAccountDTO, BindingResult result) {
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors().stream()
                     .map(FieldError::getDefaultMessage)
                     .collect(Collectors.toList());
-            return ResponseEntity.badRequest().body(new ApiErrorResponse(HttpStatus.BAD_REQUEST, "Validation Error", String.join(", ", errors)));
+            ApiErrorResponse errorResponse = new ApiErrorResponse(HttpStatus.BAD_REQUEST, "Validation Error", String.join(", ", errors));
+            return ResponseEntity.badRequest().body(CustomApiResponse.error(errorResponse));
         }
 
         if (accountMapper.existsByCustomerId(creationAccountDTO.getCustomerId())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiErrorResponse(HttpStatus.CONFLICT, "Conflict", "Account already exists for customer id"));
+            ApiErrorResponse errorResponse = new ApiErrorResponse(HttpStatus.CONFLICT, "Conflict", "Account already exists for customer id");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(CustomApiResponse.error(errorResponse));
         }
 
         ResponseAccountDTO responseAccountDTO = accountService.create(creationAccountDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseAccountDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(CustomApiResponse.success(responseAccountDTO));
     }
 }
+

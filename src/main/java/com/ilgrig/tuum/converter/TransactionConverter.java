@@ -12,7 +12,7 @@ public interface TransactionConverter {
 
     TransactionConverter INSTANCE = Mappers.getMapper(TransactionConverter.class);
 
-    @Mapping(target = "id", ignore = true) // Ignore ID during creation
+    @Mapping(target = "id", ignore = true)
     @Mapping(source = "accountId", target = "accountId")
     @Mapping(source = "currency", target = "currency")
     @Mapping(source = "amount", target = "amount")
@@ -29,5 +29,6 @@ public interface TransactionConverter {
     @Mapping(source = "currency", target = "currency")
     @Mapping(source = "direction", target = "direction")
     @Mapping(source = "description", target = "description")
+    @Mapping(source = "balanceAfterTransaction", target = "balanceAfterTransaction") // Set in service
     ResponseTransactionDTO toResponseDTO(Transaction transaction);
 }

@@ -14,5 +14,7 @@ public interface TransactionService {
 
     ResponseTransactionDTO createTransaction(CreationTransactionDTO dto);
 
-    void updateBalance(Balance balance, BigDecimal amount, TransactionDirection direction);
+    BigDecimal updateBalance(Balance balance, BigDecimal amount, TransactionDirection direction);
+
+    List<ResponseTransactionDTO> findAllByAccountId(Long accountId, RowBounds rowBounds);
 }

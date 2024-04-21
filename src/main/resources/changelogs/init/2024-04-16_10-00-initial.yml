@@ -87,6 +87,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                   name: balance_after_transaction
+                   type: numeric(16, 2)
+                   constraints:
+                        nullable: true
+              - column:
                   name: direction
                   type: character varying(4)
                   constraints:

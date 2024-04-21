@@ -64,12 +64,12 @@ public class TransactionController {
         }
     }
 
-//    @GetMapping("/{accountId}")
-//    public ResponseEntity<List<ResponseTransactionDTO>> getTransactionsByAccountId(@PathVariable Long accountId
-//            , @RequestParam(defaultValue = "0") int offset
-//            , @RequestParam(defaultValue = "10") int limit) {
-//        List<ResponseTransactionDTO> transactions = transactionService.findAll(accountId, new RowBounds(offset, limit));
-//        return ResponseEntity.ok(transactions);
-//    }
+    @GetMapping("/{accountId}")
+    public ResponseEntity<List<ResponseTransactionDTO>> getTransactionsByAccountId(@PathVariable Long accountId
+            , @RequestParam(defaultValue = "0") int offset
+            , @RequestParam(defaultValue = "10") int limit) {
+        List<ResponseTransactionDTO> transactions = transactionService.findAllByAccountId(accountId, new RowBounds(offset, limit));
+        return ResponseEntity.ok(transactions);
+    }
 
 }

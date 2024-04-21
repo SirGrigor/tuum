@@ -26,6 +26,12 @@ public class GlobalExceptionHandler {
                 .body(new ApiErrorResponse(HttpStatus.CONFLICT, "Insufficient Funds", ex.getLocalizedMessage()));
     }
 
+    @ExceptionHandler(BalanceNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleBalanceNotFoundException(BalanceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ApiErrorResponse(HttpStatus.NOT_FOUND, "Not Found", ex.getLocalizedMessage()));
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
         return ResponseEntity.badRequest()

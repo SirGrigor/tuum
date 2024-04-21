@@ -1,6 +1,5 @@
 package com.ilgrig.tuum.model.transaction;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +12,7 @@ public class ResponseTransactionDTO {
     private Long accountId;
     private Long transactionId;
     private BigDecimal amount;
+    private BigDecimal balanceAfterTransaction;
     private String currency;
     private TransactionDirection direction;
     private String description;

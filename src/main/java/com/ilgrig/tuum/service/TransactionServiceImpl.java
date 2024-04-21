@@ -10,6 +10,7 @@ import com.ilgrig.tuum.model.transaction.ResponseTransactionDTO;
 import com.ilgrig.tuum.model.transaction.TransactionDirection;
 import com.ilgrig.tuum.util.InsufficientFundsException;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,8 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -33,22 +36,29 @@ public class TransactionServiceImpl implements TransactionService {
         if (dto.getDirection() == TransactionDirection.OUT && balance.getAvailableAmount().compareTo(dto.getAmount()) < 0) {
             throw new InsufficientFundsException("Insufficient funds for the transaction.");
         }
-
         Transaction transaction = transactionConverter.toTransaction(dto);
         transaction.setBalanceId(balance.getId());
-
-        updateBalance(balance, dto.getAmount(), dto.getDirection());
+        transaction.setBalanceAfterTransaction(updateBalance(balance, dto.getAmount(), dto.getDirection()));
         transactionMapper.insert(transaction);
         return transactionConverter.toResponseDTO(transaction);
     }
 
     @Transactional
     @Override
-    public void updateBalance(Balance balance, BigDecimal amount, TransactionDirection direction) {
+    public BigDecimal updateBalance(Balance balance, BigDecimal amount, TransactionDirection direction) {
         BigDecimal newAmount = direction == TransactionDirection.IN ? balance.getAvailableAmount().add(amount) : balance.getAvailableAmount().subtract(amount);
         balance.setAvailableAmount(newAmount);
         balance.setLastUpdated(OffsetDateTime.now());
         balanceMapper.update(balance);
+        return balance.getAvailableAmount();
+    }
+
+    @Override
+    public List<ResponseTransactionDTO> findAllByAccountId(Long accountId, RowBounds rowBounds) {
+        List<Transaction> transactions = transactionMapper.findAllByAccountId(accountId, rowBounds);
+        return transactions.stream()
+                .map(transactionConverter::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
     private Balance findBalanceByAccountIdAndCurrency(Long accountId, String currency) {

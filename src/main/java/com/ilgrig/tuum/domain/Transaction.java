@@ -18,6 +18,8 @@ public class Transaction {
 
     private BigDecimal amount;
 
+    private BigDecimal balanceAfterTransaction;
+
     private TransactionDirection direction;
 
     private Long accountId;

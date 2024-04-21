@@ -21,17 +21,17 @@ public class CreationTransactionDTO {
     @Schema(type = "Long", example = "1", description = "Account ID")
     private Long accountId;
 
-    @Schema(type = "string", example = "USD", allowableValues = {"SEK", "USD", "EUR", "GBP"})
-    @Size(min = 3, max = 3)
-    @NotNull
-    private String currency;
-
     @PositiveAmount
     @Digits(integer = 18, fraction = 2)
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Schema(type = "string", example = "92.08")
     @NotNull
     private BigDecimal amount;
+
+    @Schema(type = "string", example = "USD", allowableValues = {"SEK", "USD", "EUR", "GBP"})
+    @Size(min = 3, max = 3)
+    @NotNull
+    private String currency;
 
     @NotNull
     @Schema(type = "string", example = "OUT", allowableValues = {"IN", "OUT"})

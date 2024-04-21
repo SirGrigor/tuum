@@ -26,7 +26,7 @@ public interface AccountConverter {
     @Mapping(target = "lastUpdated", expression = "java(java.time.OffsetDateTime.now())")
     Account creationAccountDTOToAccount(CreationAccountDTO creationAccountDTO);
 
-    @Mapping(source = "id", target = "id")
+    @Mapping(source = "id", target = "accountId")
     @Mapping(source = "customerId", target = "customerId")
     @Mapping(source = "balances", target = "balances")
     ResponseAccountDTO accountToResponseAccountDTO(Account account);

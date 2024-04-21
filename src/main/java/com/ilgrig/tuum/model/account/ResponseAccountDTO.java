@@ -1,6 +1,5 @@
 package com.ilgrig.tuum.model.account;
 
-import com.ilgrig.tuum.model.balance.CreationBalanceDTO;
 import com.ilgrig.tuum.model.balance.ResponseBalanceDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +15,7 @@ public class ResponseAccountDTO {
 
     @NotNull
     @Schema(description = "Account ID", example = "1")
-    private Long id;
+    private Long accountId;
 
     @NotNull
     @Schema(description = "Customer ID", example = "1")

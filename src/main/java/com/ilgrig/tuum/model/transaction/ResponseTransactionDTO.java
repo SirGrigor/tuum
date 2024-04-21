@@ -12,9 +12,9 @@ public class ResponseTransactionDTO {
     private Long accountId;
     private Long transactionId;
     private BigDecimal amount;
-    private BigDecimal balanceAfterTransaction;
     private String currency;
     private TransactionDirection direction;
     private String description;
+    private BigDecimal balanceAfterTransaction;
 
 }

@@ -8,6 +8,7 @@ import com.ilgrig.tuum.mapper.TransactionMapper;
 import com.ilgrig.tuum.model.transaction.CreationTransactionDTO;
 import com.ilgrig.tuum.model.transaction.ResponseTransactionDTO;
 import com.ilgrig.tuum.model.transaction.TransactionDirection;
+import com.ilgrig.tuum.util.AccountNotFoundException;
 import com.ilgrig.tuum.util.BalanceNotFoundException;
 import com.ilgrig.tuum.util.InsufficientFundsException;
 import com.ilgrig.tuum.util.MessagePublisher;
@@ -38,7 +39,9 @@ public class TransactionServiceImpl implements TransactionService {
     public ResponseTransactionDTO createTransaction(CreationTransactionDTO dto) {
         log.debug("Creating transaction for account ID {} and amount {}", dto.getAccountId(), dto.getAmount());
 
-        accountService.validateAccountExistence(dto.getAccountId());
+        if(!accountService.validateAccountExistence(dto.getAccountId())) {
+            throw new AccountNotFoundException("Account not found with ID " + dto.getAccountId());
+        }
 
         Balance balance = findBalanceByAccountIdAndCurrency(dto.getAccountId(), dto.getCurrency());
         validateFundsForTransaction(dto, balance);
@@ -81,6 +84,6 @@ public class TransactionServiceImpl implements TransactionService {
         List<Transaction> transactions = transactionMapper.findAllByAccountId(accountId, rowBounds);
         return transactions.stream()
                 .map(transactionConverter::toResponseDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

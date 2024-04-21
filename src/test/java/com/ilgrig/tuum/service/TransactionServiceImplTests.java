@@ -98,4 +98,22 @@ public class TransactionServiceImplTests {
 
         assertEquals("Insufficient funds for the transaction.", exception.getMessage());
     }
+
+    @Test
+    public void testCreateTransaction_AccountNotFound() {
+        CreationTransactionDTO dto = new CreationTransactionDTO();
+        dto.setAccountId(9999L); // Non-existing account ID
+        dto.setAmount(new BigDecimal("100.00"));
+        dto.setCurrency("USD");
+        dto.setDirection(TransactionDirection.IN);
+
+        when(balanceMapper.findBalanceByAccountIdAndCurrency(9999L, "USD")).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            transactionService.createTransaction(dto);
+        });
+
+        assertEquals("Account not found with ID 9999", exception.getMessage());
+    }
+
 }

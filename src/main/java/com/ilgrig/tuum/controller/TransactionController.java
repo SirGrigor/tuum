@@ -20,12 +20,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@Validated
 @RequestMapping(value = "/api/transactions", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TransactionController {
 
@@ -69,5 +71,4 @@ public class TransactionController {
         List<ResponseTransactionDTO> transactions = transactionService.findAllByAccountId(accountId, new RowBounds(offset, limit));
         return ResponseEntity.ok(CustomApiResponse.success(transactions));
     }
-
 }

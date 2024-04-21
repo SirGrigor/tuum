@@ -75,4 +75,57 @@ public class AccountServiceImplTests {
 
         assertTrue(exception.getMessage().contains("No account found with ID: 999"));
     }
+
+    @Test
+    public void createAccount_withValidData_returnsAccountInfo() {
+        CreationAccountDTO dto = new CreationAccountDTO();
+        dto.setCustomerId(999L);
+        dto.setCountry("DE");
+        dto.setCurrencies(List.of("EUR"));
+
+        Account account = new Account();
+        when(accountConverter.creationAccountDTOToAccount(dto)).thenReturn(account);
+
+        doNothing().when(accountMapper).insert(any(Account.class));
+
+        ResponseAccountDTO expectedResponse = new ResponseAccountDTO();
+        when(accountConverter.accountToResponseAccountDTO(any(Account.class))).thenReturn(expectedResponse);
+
+        ResponseAccountDTO response = accountService.create(dto);
+
+        assertNotNull(response, "The response should not be null");
+        assertEquals(expectedResponse, response, "The expected response should match the actual response");
+
+        verify(accountMapper).insert(any(Account.class));
+
+        verify(messagePublisher).publishAccountCreated(any(Account.class), anyList());
+    }
+
+    @Test
+    public void getAccount_existingAccountId_returnsAccountInfo() {
+        Long accountId = 1L;
+        Account account = new Account();
+        when(accountMapper.findAccountById(accountId)).thenReturn(Optional.of(account));
+
+        ResponseAccountDTO expectedResponse = new ResponseAccountDTO();
+        when(accountConverter.accountToResponseAccountDTO(account)).thenReturn(expectedResponse);
+
+        ResponseAccountDTO response = accountService.get(accountId);
+
+        assertNotNull(response, "The response should not be null");
+        assertEquals(expectedResponse, response, "The expected response should match the actual response");
+    }
+
+    @Test
+    public void getAccount_nonExistingAccountId_throwsException() {
+        Long accountId = 999L;
+        when(accountMapper.findAccountById(accountId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(AccountNotFoundException.class, () -> {
+            accountService.get(accountId);
+        });
+
+        assertTrue(exception.getMessage().contains("No account found with ID: " + accountId));
+    }
+
 }

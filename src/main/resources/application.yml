@@ -1,7 +1,7 @@
 spring:
   datasource:
-#    url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5433/bank}
-    url: jdbc:postgresql://postgres:5432/bank
+    url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5433/bank}
+#    url: jdbc:postgresql://postgres:5432/bank
     username: ${JDBC_DATABASE_USERNAME:postgres}
     password: ${JDBC_DATABASE_PASSWORD:P4ssword!}
     dbcp2:
@@ -9,8 +9,8 @@ spring:
       validation-query: SELECT 1
       validation-query-timeout: 30
   rabbitmq:
-#    host: localhost
-    host: rabbitmq
+    host: localhost
+#    host: rabbitmq
     port: 5672
     username: user
     password: password

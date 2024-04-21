@@ -52,9 +52,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean validateAccountExistence(Long accountId) {
-        if (accountMapper.findAccountById(accountId).isPresent()) {
-            return true;
-        }
-        throw new AccountNotFoundException("Account with ID " + accountId + " does not exist.");
+        return accountMapper.findAccountById(accountId).isPresent();
     }
 }

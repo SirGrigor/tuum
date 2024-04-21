@@ -15,7 +15,6 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class CreationTransactionDTO {
-
     @NotNull
     @Schema(type = "Long", example = "1", description = "Account ID")
     private Long accountId;
@@ -29,6 +28,7 @@ public class CreationTransactionDTO {
 
     @Schema(type = "string", example = "USD", allowableValues = {"SEK", "USD", "EUR", "GBP"})
     @NotNull
+    @ValidTransactionCurrency
     private String currency;
 
     @NotNull

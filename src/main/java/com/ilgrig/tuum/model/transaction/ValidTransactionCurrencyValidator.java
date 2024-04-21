@@ -1,15 +1,14 @@
-package com.ilgrig.tuum.model.account;
+package com.ilgrig.tuum.model.transaction;
 
 import com.ilgrig.tuum.util.InvalidCurrencyException;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.Currency;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ValidCurrencyValidator implements ConstraintValidator<ValidCurrency, List<String>> {
+public class ValidTransactionCurrencyValidator implements ConstraintValidator<ValidTransactionCurrency, String> {
 
     private static final Set<String> ALLOWED_CURRENCIES = Set.of("SEK", "USD", "EUR", "GBP");
     private static final Set<String> ALL_AVAILABLE_CURRENCIES = Currency.getAvailableCurrencies().stream()
@@ -17,11 +16,12 @@ public class ValidCurrencyValidator implements ConstraintValidator<ValidCurrency
             .collect(Collectors.toSet());
 
     @Override
-    public boolean isValid(List<String> currencies, ConstraintValidatorContext context) {
-        if (currencies == null || currencies.isEmpty()) {
-            return false;
+    public boolean isValid(String currency, ConstraintValidatorContext context) {
+        if (currency == null) {
+            throw new InvalidCurrencyException("Currency cannot be null.");
         }
 
-        return currencies.stream().allMatch(currency -> ALLOWED_CURRENCIES.contains(currency) && ALL_AVAILABLE_CURRENCIES.contains(currency));
+        return ALLOWED_CURRENCIES.contains(currency) && ALL_AVAILABLE_CURRENCIES.contains(currency);
     }
+
 }

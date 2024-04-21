@@ -23,7 +23,7 @@ public class AccountControllerTests extends BaseIntegrationTest {
     }
 
     @Test
-    public void testCreateAccount_Conflict() throws Exception {
+    public void testCreateAccount_Bad_Request() throws Exception {
         String jsonContent = "{\"customerId\": 1, \"country\": \"US\", \"currencies\": [\"USD\"]}";
         mockMvc.perform(post("/api/accounts")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -49,7 +49,7 @@ public class AccountControllerTests extends BaseIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error.message").value(containsString("Invalid currency")));
+                .andExpect(jsonPath("$.error.message").value(containsString("Validation failed: createAccount.creationAccountDTO.currencies: Invalid currency")));
     }
 
     @Test
@@ -65,4 +65,40 @@ public class AccountControllerTests extends BaseIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.accountId").value(1));
     }
+
+    @Test
+    public void createAccount_withValidData_returnsAccountInfo() throws Exception {
+        String jsonContent = "{\"customerId\": 123, \"country\": \"US\", \"currencies\": [\"USD\", \"EUR\"]}";
+        mockMvc.perform(post("/api/accounts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonContent))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.data.customerId").value(123));
+    }
+
+    @Test
+    public void createAccount_withInvalidCurrency_returnsBadRequest() throws Exception {
+        String jsonContent = "{\"customerId\": 456, \"country\": \"UK\", \"currencies\": [\"USD\", \"JPY\"]}";
+        mockMvc.perform(post("/api/accounts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonContent))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error.message").value(containsString("Validation failed: createAccount.creationAccountDTO.currencies: Invalid currency,")))
+                .andExpect(jsonPath("$.error.message").value(containsString("createAccount.creationAccountDTO.country: Invalid country. Must be a valid ISO country code.")));
+    }
+
+    @Test
+    public void getAccount_existingAccountId_returnsAccountInfo() throws Exception {
+        mockMvc.perform(get("/api/accounts/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.accountId").value(1));
+    }
+
+    @Test
+    public void getAccount_nonExistingAccountId_returnsNotFound() throws Exception {
+        mockMvc.perform(get("/api/accounts/999"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.error.message").value("No account found with ID: 999"));
+    }
+
 }

@@ -1,11 +1,9 @@
 package com.ilgrig.tuum.mapper;
 
 import com.ilgrig.tuum.domain.Account;
-import com.ilgrig.tuum.domain.Balance;
 import org.apache.ibatis.annotations.*;
 
 import java.util.Optional;
-import java.util.Set;
 
 @Mapper
 public interface AccountMapper {
@@ -17,9 +15,6 @@ public interface AccountMapper {
             " VALUES (#{customerId}, #{country}, #{dateCreated}, #{lastUpdated})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(Account account);
-
-    @Update("UPDATE account SET customer_id = #{customerId}, country = #{country}, last_updated = #{lastUpdated} WHERE id = #{id}")
-    void update(Account account);
 
     @Select("SELECT EXISTS(SELECT 1 FROM account WHERE customer_id = #{customerId})")
     boolean existsByCustomerId(Long customerId);

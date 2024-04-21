@@ -1,6 +1,5 @@
 package com.ilgrig.tuum.model.account;
 
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -10,10 +9,6 @@ import java.util.Locale;
 public class ValidCountryValidator implements ConstraintValidator<ValidCountry, String> {
 
     private final String[] isoCountries = Locale.getISOCountries();
-
-    @Override
-    public void initialize(ValidCountry constraintAnnotation) {
-    }
 
     @Override
     public boolean isValid(String countryValue, ConstraintValidatorContext context) {

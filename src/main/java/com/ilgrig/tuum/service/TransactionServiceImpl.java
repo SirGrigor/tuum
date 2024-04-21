@@ -12,15 +12,11 @@ import com.ilgrig.tuum.util.InsufficientFundsException;
 import com.ilgrig.tuum.util.MessagePublisher;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -31,7 +27,6 @@ public class TransactionServiceImpl implements TransactionService {
     private final BalanceMapper balanceMapper;
     private final TransactionConverter transactionConverter;
     private final MessagePublisher messagePublisher;
-
 
     @Transactional
     @Override
@@ -44,35 +39,16 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setBalanceId(balance.getId());
         transaction.setBalanceAfterTransaction(updateBalance(balance, dto.getAmount(), dto.getDirection()));
         transactionMapper.insert(transaction);
-
-        messagePublisher.publishEvent("Transaction Created", Map.of(
-                "accountId", transaction.getAccountId(),
-                "transactionId", transaction.getId(),
-                "amount", transaction.getAmount(),
-                "currency", transaction.getCurrency(),
-                "direction", transaction.getDirection().toString(),
-                "balanceAfter", transaction.getBalanceAfterTransaction()
-        ));
-
+        messagePublisher.publishTransactionCreated(transaction);
         return transactionConverter.toResponseDTO(transaction);
     }
 
-    @Transactional
-    @Override
     public BigDecimal updateBalance(Balance balance, BigDecimal amount, TransactionDirection direction) {
         BigDecimal newAmount = direction == TransactionDirection.IN ? balance.getAvailableAmount().add(amount) : balance.getAvailableAmount().subtract(amount);
         balance.setAvailableAmount(newAmount);
-        balance.setLastUpdated(OffsetDateTime.now());
         balanceMapper.update(balance);
-
-        messagePublisher.publishEvent("Balance Updated", Map.of(
-                "balanceId", balance.getId(),
-                "direction",direction,
-                "newBalance", balance.getAvailableAmount(),
-                "currency", balance.getCurrency()
-        ));
-
-        return balance.getAvailableAmount();
+        messagePublisher.publishBalanceUpdated(balance);
+        return newAmount;
     }
 
     @Override
@@ -86,7 +62,7 @@ public class TransactionServiceImpl implements TransactionService {
     private Balance findBalanceByAccountIdAndCurrency(Long accountId, String currency) {
         Balance balance = balanceMapper.findBalanceByAccountIdAndCurrency(accountId, currency);
         if (balance == null) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Balance not found for account and currency.");
+            throw new InsufficientFundsException("Balance not found for account and currency.");
         }
         return balance;
     }

@@ -16,10 +16,6 @@ public class ValidCurrencyValidator implements ConstraintValidator<ValidCurrency
             .collect(Collectors.toSet());
 
     @Override
-    public void initialize(ValidCurrency constraintAnnotation) {
-    }
-
-    @Override
     public boolean isValid(List<String> currencies, ConstraintValidatorContext context) {
         if (currencies == null || currencies.isEmpty()) {
             return false;

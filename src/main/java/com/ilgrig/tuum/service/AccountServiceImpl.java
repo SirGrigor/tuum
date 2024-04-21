@@ -13,9 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
 import java.util.Set;
-
 
 @RequiredArgsConstructor
 @Service
@@ -26,6 +24,22 @@ public class AccountServiceImpl implements AccountService {
     private final BalanceMapper balanceMapper;
     private final MessagePublisher messagePublisher;
 
+    @Transactional
+    @Override
+    public ResponseAccountDTO create(final CreationAccountDTO creationAccountDTO) {
+        final Account account = accountConverter.creationAccountDTOToAccount(creationAccountDTO);
+        accountMapper.insert(account);
+        messagePublisher.publishAccountCreated(account, creationAccountDTO.getCurrencies());
+
+        accountConverter.fillBalances(account, creationAccountDTO);
+        for (Balance balance : account.getBalances()) {
+            balance.setAccount(account);
+            balanceMapper.insert(balance);
+            messagePublisher.publishBalanceCreated(balance);
+        }
+
+        return accountConverter.accountToResponseAccountDTO(account);
+    }
 
     @Override
     public ResponseAccountDTO get(final Long id) {
@@ -35,25 +49,4 @@ public class AccountServiceImpl implements AccountService {
         account.setBalances(balances);
         return accountConverter.accountToResponseAccountDTO(account);
     }
-
-
-    @Transactional
-    @Override
-    public ResponseAccountDTO create(final CreationAccountDTO creationAccountDTO) {
-        final Account account = accountConverter.creationAccountDTOToAccount(creationAccountDTO);
-        accountMapper.insert(account);
-        accountConverter.fillBalances(account, creationAccountDTO);
-        for (Balance balance : account.getBalances()) {
-            balance.setAccount(account);
-            balanceMapper.insert(balance);
-
-            messagePublisher.publishEvent("Balance Created", Map.of(
-                    "accountId", account.getId(),
-                    "currency", balance.getCurrency(),
-                    "availableAmount", balance.getAvailableAmount()
-            ));
-        }
-        return accountConverter.accountToResponseAccountDTO(account);
-    }
-
 }

@@ -6,13 +6,9 @@ import com.ilgrig.tuum.model.balance.ResponseBalanceDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface BalanceConverter {
-
-    BalanceConverter INSTANCE = Mappers.getMapper(BalanceConverter.class);
-
 
     @Mappings({
             @Mapping(source = "id", target = "id"),
@@ -20,7 +16,6 @@ public interface BalanceConverter {
             @Mapping(source = "currency", target = "currency")
     })
     ResponseBalanceDTO toResponseBalanceDTO(Balance balance);
-
     @Mappings({
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "availableAmount", target = "availableAmount"),

@@ -56,7 +56,7 @@ public class TransactionServiceImpl implements TransactionService {
         List<Transaction> transactions = transactionMapper.findAllByAccountId(accountId, rowBounds);
         return transactions.stream()
                 .map(transactionConverter::toResponseDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private Balance findBalanceByAccountIdAndCurrency(Long accountId, String currency) {

@@ -73,15 +73,9 @@ public class GlobalExceptionHandler {
 
     private String constructDetailedErrorMessage(Exception ex) {
         String message = String.format("Error of type %s occurred with message: %s", ex.getClass().getSimpleName(), ex.getLocalizedMessage());
-        if (isDebugModeEnabled()) {
-            String stackTrace = getStackTraceAsString(ex);
-            message += String.format(". Stack Trace: %s", stackTrace);
-        }
+        String stackTrace = getStackTraceAsString(ex);
+        message += String.format(". Stack Trace: %s", stackTrace);
         return message;
-    }
-
-    private boolean isDebugModeEnabled() {
-        return true;
     }
 
     private String getStackTraceAsString(Exception ex) {

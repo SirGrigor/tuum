@@ -7,7 +7,11 @@ spring:
       max-wait-millis: 30000
       validation-query: SELECT 1
       validation-query-timeout: 30
-
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: password
   mybatis:
     type-aliases-package: io.tuum.bank.base.domain
     mapper-locations: classpath:/mappers/**/*.xml

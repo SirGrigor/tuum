@@ -9,6 +9,7 @@ import com.ilgrig.tuum.model.transaction.CreationTransactionDTO;
 import com.ilgrig.tuum.model.transaction.ResponseTransactionDTO;
 import com.ilgrig.tuum.model.transaction.TransactionDirection;
 import com.ilgrig.tuum.util.InsufficientFundsException;
+import com.ilgrig.tuum.util.MessagePublisher;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -28,6 +30,8 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionMapper transactionMapper;
     private final BalanceMapper balanceMapper;
     private final TransactionConverter transactionConverter;
+    private final MessagePublisher messagePublisher;
+
 
     @Transactional
     @Override
@@ -40,6 +44,16 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setBalanceId(balance.getId());
         transaction.setBalanceAfterTransaction(updateBalance(balance, dto.getAmount(), dto.getDirection()));
         transactionMapper.insert(transaction);
+
+        messagePublisher.publishEvent("Transaction Created", Map.of(
+                "accountId", transaction.getAccountId(),
+                "transactionId", transaction.getId(),
+                "amount", transaction.getAmount(),
+                "currency", transaction.getCurrency(),
+                "direction", transaction.getDirection().toString(),
+                "balanceAfter", transaction.getBalanceAfterTransaction()
+        ));
+
         return transactionConverter.toResponseDTO(transaction);
     }
 
@@ -50,6 +64,14 @@ public class TransactionServiceImpl implements TransactionService {
         balance.setAvailableAmount(newAmount);
         balance.setLastUpdated(OffsetDateTime.now());
         balanceMapper.update(balance);
+
+        messagePublisher.publishEvent("Balance Updated", Map.of(
+                "balanceId", balance.getId(),
+                "direction",direction,
+                "newBalance", balance.getAvailableAmount(),
+                "currency", balance.getCurrency()
+        ));
+
         return balance.getAvailableAmount();
     }
 

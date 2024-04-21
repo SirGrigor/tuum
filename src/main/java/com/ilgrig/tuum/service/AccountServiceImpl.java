@@ -8,10 +8,12 @@ import com.ilgrig.tuum.mapper.BalanceMapper;
 import com.ilgrig.tuum.model.account.CreationAccountDTO;
 import com.ilgrig.tuum.model.account.ResponseAccountDTO;
 import com.ilgrig.tuum.util.AccountNotFoundException;
+import com.ilgrig.tuum.util.MessagePublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
 import java.util.Set;
 
 
@@ -22,6 +24,8 @@ public class AccountServiceImpl implements AccountService {
     private final AccountConverter accountConverter;
     private final AccountMapper accountMapper;
     private final BalanceMapper balanceMapper;
+    private final MessagePublisher messagePublisher;
+
 
     @Override
     public ResponseAccountDTO get(final Long id) {
@@ -42,6 +46,12 @@ public class AccountServiceImpl implements AccountService {
         for (Balance balance : account.getBalances()) {
             balance.setAccount(account);
             balanceMapper.insert(balance);
+
+            messagePublisher.publishEvent("Balance Created", Map.of(
+                    "accountId", account.getId(),
+                    "currency", balance.getCurrency(),
+                    "availableAmount", balance.getAvailableAmount()
+            ));
         }
         return accountConverter.accountToResponseAccountDTO(account);
     }

@@ -1,0 +1,5 @@
+{
+  "customerId": 123,
+  "country": "SE",
+  "currencies": ["SEK", "USD", "EUR", "GBP"]
+}

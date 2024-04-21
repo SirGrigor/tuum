@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 @Setter
 public class CreationTransactionDTO {
 
-    @ValidAccount
     @NotNull
     @Schema(type = "Long", example = "1", description = "Account ID")
     private Long accountId;

@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -20,7 +21,7 @@ public class Balance {
 
     private String currency;
 
-    private Set<Transaction> transactions;
+    private Set<Transaction> transactions = new HashSet<>();
 
     private OffsetDateTime dateCreated;
 

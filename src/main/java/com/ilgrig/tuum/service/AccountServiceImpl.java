@@ -49,4 +49,12 @@ public class AccountServiceImpl implements AccountService {
         account.setBalances(balances);
         return accountConverter.accountToResponseAccountDTO(account);
     }
+
+    @Override
+    public boolean validateAccountExistence(Long accountId) {
+        if (accountMapper.findAccountById(accountId).isPresent()) {
+            return true;
+        }
+        throw new AccountNotFoundException("Account with ID " + accountId + " does not exist.");
+    }
 }

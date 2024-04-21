@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public interface AccountConverter {
 
     AccountConverter INSTANCE = Mappers.getMapper(AccountConverter.class);
-
+    @Mapping(target = "id", ignore = true)
     @Mapping(source = "customerId", target = "customerId")
     @Mapping(source = "country", target = "country")
     @Mapping(target = "balances", ignore = true)

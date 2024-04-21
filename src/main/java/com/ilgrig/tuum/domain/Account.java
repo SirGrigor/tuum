@@ -5,8 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
-
 
 @Data
 @AllArgsConstructor
@@ -14,17 +14,11 @@ import java.util.Set;
 public class Account {
 
     private Long id;
-
     private Long customerId;
-
     private String country;
-
-    private Set<Balance> balances;
-
-    private Set<Transaction> transactions;
-
+    private Set<Balance> balances = new HashSet<>();
+    private Set<Transaction> transactions = new HashSet<>();
     private OffsetDateTime dateCreated;
-
     private OffsetDateTime lastUpdated;
 
 }

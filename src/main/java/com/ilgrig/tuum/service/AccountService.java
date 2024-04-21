@@ -10,4 +10,5 @@ public interface AccountService {
 
     ResponseAccountDTO create(CreationAccountDTO creationAccountDTO);
 
+    boolean validateAccountExistence(Long accountId);
 }

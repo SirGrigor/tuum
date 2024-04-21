@@ -3,6 +3,7 @@ package com.ilgrig.tuum.mapper;
 import com.ilgrig.tuum.domain.Balance;
 import org.apache.ibatis.annotations.*;
 
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -32,7 +33,7 @@ public interface BalanceMapper {
             @Result(property = "availableAmount", column = "available_amount"),
             @Result(property = "currency", column = "currency"),
     })
-    Balance findBalanceByAccountIdAndCurrency(@Param("accountId") Long accountId, @Param("currency") String currency);
+    Optional<Balance> findBalanceByAccountIdAndCurrency(@Param("accountId") Long accountId, @Param("currency") String currency);
 
     @Update("UPDATE balance SET available_amount = #{availableAmount}, last_updated = #{lastUpdated} " +
             "WHERE id = #{id}")

@@ -1,47 +1,52 @@
-# Getting Started
+# Tuum test assignment
 
-### Prerequisites
+This application is a RESTful API that simulates the core system of the bank.
+---------------------------------------
+## Prerequisites
 
+Before you begin, ensure you have the following installed:
+If your prefer running application with docker first 3 steps can be skipped.
+
+1. **SonarQube can be set-up running in a Docker container via 2nd repository.**
+2. **Java JDK 17**: [Download JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+3. **Gradle**: [Installing Gradle](https://gradle.org/install/)
+4. **Docker**: [Install Docker](https://docs.docker.com/get-docker/) (if you plan to use Docker containers), please consider to add docker compose functionality as well
+
+---------------------------------------
+### Build with Gradle
+
+To build the project, run the following command:
 ```bash
 ./gradlew build -x test
 ```
-
+---------------------------------------
+NB! Switch set-up in application properties for DB and RabbitMQ url. By Default enable Docker build
 ```bash
-java -D"spring.profiles.active=development" -jar build/libs/tuum-0.0.1-SNAPSHOT.jar
+java -jar build/libs/tuum-0.0.1-SNAPSHOT.jar
 ```
 
+---------------------------------------
+### Build with Docker
+1. Build project with docker
+Start
 ```bash
-java "-Dspring.profiles.active=development" -jar build/libs/tuum-0.0.1-SNAPSHOT.jar
+docker-compose -f docker-compose.yml up --build
 ```
 
-
-### Reference Documentation
-
-For further reference, please consider the following sections:
-
-* [Official Gradle documentation](https://docs.gradle.org)
-* [Spring Boot Gradle Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/3.2.5/gradle-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/3.2.5/gradle-plugin/reference/html/#build-image)
-* [MyBatis Framework](https://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)
-* [Liquibase Migration](https://docs.spring.io/spring-boot/docs/3.2.5/reference/htmlsingle/index.html#howto.data-initialization.migration-tool.liquibase)
-* [Spring Web](https://docs.spring.io/spring-boot/docs/3.2.5/reference/htmlsingle/index.html#web)
-
-### Guides
-
-The following guides illustrate how to use some features concretely:
-
-* [MyBatis Quick Start](https://github.com/mybatis/spring-boot-starter/wiki/Quick-Start)
-* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
-* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
-* [Building REST services with Spring](https://spring.io/guides/tutorials/rest/)
-
-### Additional Links
-
-These additional references should also help you:
-
-* [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
-
+Stop
+```bash
+docker-compose -f docker-compose.yml down
+````
+---------------------------------------
+### Access RabbitMQ
+RabbitMQ is used as message broker.
+You can access it via browser
+- Development profile: http://localhost:15672/ 
+   credentials: user: user, password: password
+---------------------------------------
 ### SonarQube Integration
+If you would like to check the quality of your code, you can integrate the project with SonarQube.
+Application has all required plugins and configurations to run SonarQube analysis.
 
 For SonarQube integration, follow the steps below:
 Clone separate repository for SonarQube server and run it locally:

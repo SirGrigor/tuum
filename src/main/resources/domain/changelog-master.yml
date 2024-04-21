@@ -1,4 +1,4 @@
 databaseChangeLog:
   - include:
-      file: classpath:/changelogs/init/2024-04-16_10-00-initial.yml
+      file: classpath:/changelogs/2024-04-16_10-00-initial.yml
 

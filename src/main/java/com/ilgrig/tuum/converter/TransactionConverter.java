@@ -20,7 +20,7 @@ public interface TransactionConverter {
     @Mapping(source = "description", target = "description")
     @Mapping(target = "dateCreated", expression = "java(java.time.OffsetDateTime.now())")
     @Mapping(target = "lastUpdated", expression = "java(java.time.OffsetDateTime.now())")
-    @Mapping(target = "balanceId", ignore = true) // Set in service
+    @Mapping(target = "balanceId", ignore = true)
     Transaction toTransaction(CreationTransactionDTO dto);
 
     @Mapping(source = "accountId", target = "accountId")
@@ -29,6 +29,6 @@ public interface TransactionConverter {
     @Mapping(source = "currency", target = "currency")
     @Mapping(source = "direction", target = "direction")
     @Mapping(source = "description", target = "description")
-    @Mapping(source = "balanceAfterTransaction", target = "balanceAfterTransaction") // Set in service
+    @Mapping(source = "balanceAfterTransaction", target = "balanceAfterTransaction")
     ResponseTransactionDTO toResponseDTO(Transaction transaction);
 }

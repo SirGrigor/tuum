@@ -1,5 +1,20 @@
 # Getting Started
 
+### Prerequisites
+
+```bash
+./gradlew build -x test
+```
+
+```bash
+java -D"spring.profiles.active=development" -jar build/libs/tuum-0.0.1-SNAPSHOT.jar
+```
+
+```bash
+java "-Dspring.profiles.active=development" -jar build/libs/tuum-0.0.1-SNAPSHOT.jar
+```
+
+
 ### Reference Documentation
 
 For further reference, please consider the following sections:

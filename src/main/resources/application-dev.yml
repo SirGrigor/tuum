@@ -1,7 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://postgres-dev:5432/bank
-    username: devuser
-    password: devpass
-  rabbitmq:
-    host: rabbitmq-dev

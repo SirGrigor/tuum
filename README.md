@@ -27,7 +27,7 @@ java -jar build/libs/tuum-0.0.1-SNAPSHOT.jar
 1. Build project with docker
 Start Dev
 ```bash
-docker-compose -f docker-compose.dev.yml up --build
+docker-compose -f docker-compose.yml up --build
 ```
 
 Stop Dev

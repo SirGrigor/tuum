@@ -1,4 +1,4 @@
-package com.ilgrig.tuum.service;
+package com.ilgrig.tuum.integration.service;
 
 import com.ilgrig.tuum.converter.TransactionConverter;
 import com.ilgrig.tuum.domain.Account;
@@ -9,6 +9,7 @@ import com.ilgrig.tuum.mapper.TransactionMapper;
 import com.ilgrig.tuum.model.transaction.CreationTransactionDTO;
 import com.ilgrig.tuum.model.transaction.ResponseTransactionDTO;
 import com.ilgrig.tuum.model.transaction.TransactionDirection;
+import com.ilgrig.tuum.service.TransactionServiceImpl;
 import com.ilgrig.tuum.util.MessagePublisher;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

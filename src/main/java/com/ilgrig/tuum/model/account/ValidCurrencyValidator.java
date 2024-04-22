@@ -1,6 +1,5 @@
 package com.ilgrig.tuum.model.account;
 
-import com.ilgrig.tuum.util.InvalidCurrencyException;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

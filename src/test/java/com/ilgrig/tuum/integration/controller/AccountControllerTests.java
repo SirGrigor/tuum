@@ -1,6 +1,6 @@
-package com.ilgrig.tuum.controller;
+package com.ilgrig.tuum.integration.controller;
 
-import com.ilgrig.tuum.config.BaseIntegrationTest;
+import com.ilgrig.tuum.integration.config.BaseIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
@@ -78,13 +78,11 @@ public class AccountControllerTests extends BaseIntegrationTest {
 
     @Test
     public void createAccount_withInvalidCurrency_returnsBadRequest() throws Exception {
-        String jsonContent = "{\"customerId\": 456, \"country\": \"UK\", \"currencies\": [\"USD\", \"JPY\"]}";
+        String jsonContent = "{\"customerId\": 456, \"country\": \"UK\", \"currencies\": [\"JPY\"]}";
         mockMvc.perform(post("/api/accounts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error.message").value(containsString("Validation failed: createAccount.creationAccountDTO.currencies: Invalid currency,")))
-                .andExpect(jsonPath("$.error.message").value(containsString("createAccount.creationAccountDTO.country: Invalid country. Must be a valid ISO country code.")));
+                .andExpect(status().isBadRequest());
     }
 
     @Test

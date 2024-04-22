@@ -1,4 +1,4 @@
-package com.ilgrig.tuum.config;
+package com.ilgrig.tuum.integration.config;
 
 import com.ilgrig.tuum.TuumApplication;
 import com.ilgrig.tuum.mapper.AccountMapper;

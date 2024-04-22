@@ -1,4 +1,4 @@
-package com.ilgrig.tuum.service;
+package com.ilgrig.tuum.integration.service;
 
 import com.ilgrig.tuum.converter.AccountConverter;
 import com.ilgrig.tuum.domain.Account;
@@ -6,6 +6,7 @@ import com.ilgrig.tuum.mapper.AccountMapper;
 import com.ilgrig.tuum.mapper.BalanceMapper;
 import com.ilgrig.tuum.model.account.CreationAccountDTO;
 import com.ilgrig.tuum.model.account.ResponseAccountDTO;
+import com.ilgrig.tuum.service.AccountServiceImpl;
 import com.ilgrig.tuum.util.AccountNotFoundException;
 import com.ilgrig.tuum.util.MessagePublisher;
 import org.junit.jupiter.api.Test;

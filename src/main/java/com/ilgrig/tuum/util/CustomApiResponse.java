@@ -28,7 +28,6 @@ public class CustomApiResponse<T> {
         return error != null;
     }
 
-    // Factory methods for success and error
     public static <T> CustomApiResponse<T> success(T data) {
         return new CustomApiResponse<>(data);
     }

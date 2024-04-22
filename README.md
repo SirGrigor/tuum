@@ -15,10 +15,7 @@ If your prefer running application with docker first 3 steps can be skipped.
 ---------------------------------------
 ### Build with Gradle
 
-To build the project, run the following command:
-```bash
-./gradlew build -x test
-```
+For testing applicatiio
 ---------------------------------------
 NB! Switch set-up in application properties for DB and RabbitMQ url. By Default enable Docker build
 ```bash

@@ -1,4 +1,4 @@
-package com.ilgrig.tuum.config;
+package com.ilgrig.tuum.integration.config;
 
 import com.ilgrig.tuum.util.MessagePublisher;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

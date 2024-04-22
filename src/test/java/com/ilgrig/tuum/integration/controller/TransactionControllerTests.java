@@ -1,6 +1,6 @@
-package com.ilgrig.tuum.controller;
+package com.ilgrig.tuum.integration.controller;
 
-import com.ilgrig.tuum.config.BaseIntegrationTest;
+import com.ilgrig.tuum.integration.config.BaseIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 

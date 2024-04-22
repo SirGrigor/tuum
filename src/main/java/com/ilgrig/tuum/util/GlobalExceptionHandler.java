@@ -75,7 +75,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex) {
         List<String> errors = ex.getConstraintViolations().stream()
                 .map(cv -> cv.getPropertyPath() + ": " + cv.getMessage())
-                .collect(Collectors.toList());
+                .toList();
         String errorMessage = "Validation failed: " + String.join(", ", errors);
         return buildErrorResponse(ex, HttpStatus.BAD_REQUEST, errorMessage);
     }

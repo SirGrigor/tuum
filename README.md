@@ -5,7 +5,6 @@ This application is a RESTful API that simulates the core system of the bank.
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
-If your prefer running application with docker first 3 steps can be skipped.
 
 1. **SonarQube can be set-up running in a Docker container via 2nd repository.**
 2. **Java JDK 17**: [Download JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
@@ -15,12 +14,23 @@ If your prefer running application with docker first 3 steps can be skipped.
 ---------------------------------------
 ### Build with Gradle
 
-For testing applicatiio
----------------------------------------
-NB! Switch set-up in application properties for DB and RabbitMQ url. By Default enable Docker build
+Local run and unit / integration test  with Gradle
+
 ```bash
-java -jar build/libs/tuum-0.0.1-SNAPSHOT.jar
+docker-compose up -d --build postgres rabbitmq
+````
+
+NB! 
+I haven`t implented the Spring profiles, so I kidnly as you to uncomment the following lines in application.yml file
+Also, comment them back, if you want to build application with docker compose. They will wrap application into docker context
+
+-  line 3:   url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5433/bank}
+-  line 12:  host: localhost
+
+```bash
+./gradlew test
 ```
+
 
 ---------------------------------------
 ### Build with Docker
@@ -35,16 +45,21 @@ Stop Dev
 docker-compose -f docker-compose.dev.yml down
 ````
 
+### How to test? 
+Follow TUUM test assignment instructions to test the application.
+Behaviour of the application reflect the requirements of the assignment.
 
-Start Test
-```bash
-docker-compose -f docker-compose.test.yml up --build
-```
+PDF file embdded to application root folder.
+PDF with the report, suggestion and scalability improvements is available in the root folder of the project.
 
-Stop test
-```bash
-docker-compose -f docker-compose.test.yml up down
-````
+---------------------------------------
+### Access Swagger UI
+Swagger UI is used to test the API.
+You can access it via browser
+http://localhost:8080/swagger-ui/index.html#/
+
+DTO details described in Swagger UI schemas.
+
 Application is accessible via: http://localhost:8080/swagger-ui/index.html
 ---------------------------------------
 ### Access RabbitMQ
@@ -53,6 +68,8 @@ You can access it via browser
 - Development profile: http://localhost:15672/ 
    credentials: user: user, password: password
 ---------------------------------------
+
+## Optional
 ### SonarQube Integration
 If you would like to check the quality of your code, you can integrate the project with SonarQube.
 Application has all required plugins and configurations to run SonarQube analysis.

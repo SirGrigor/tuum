@@ -32,6 +32,7 @@ dependencies {
     implementation('org.mapstruct:mapstruct:1.5.5.Final')
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-amqp', version: '3.2.5'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.2.5'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
     annotationProcessor('org.mapstruct:mapstruct-processor:1.5.5.Final')
     annotationProcessor('org.projectlombok:lombok-mapstruct-binding:0.2.0')
     compileOnly 'org.projectlombok:lombok'

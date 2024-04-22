@@ -63,7 +63,7 @@ public class TransactionServiceImplTests {
 
         Transaction transaction = new Transaction();
         ResponseTransactionDTO expectedResponse = new ResponseTransactionDTO();
-        expectedResponse.setTransactionId(1L); // Example setter
+        expectedResponse.setTransactionId(1L);
 
         when(balanceMapper.findBalanceByAccountIdAndCurrency(1L, "USD")).thenReturn(Optional.of(balance));
         when(transactionConverter.toTransaction(dto)).thenReturn(transaction);
@@ -103,7 +103,7 @@ public class TransactionServiceImplTests {
     @Test
     public void testCreateTransaction_AccountNotFound() {
         CreationTransactionDTO dto = new CreationTransactionDTO();
-        dto.setAccountId(9999L); // Non-existing account ID
+        dto.setAccountId(9999L);
         dto.setAmount(new BigDecimal("100.00"));
         dto.setCurrency("USD");
         dto.setDirection(TransactionDirection.IN);

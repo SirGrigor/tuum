@@ -60,7 +60,6 @@ http://localhost:8080/swagger-ui/index.html#/
 
 DTO details described in Swagger UI schemas.
 
-Application is accessible via: http://localhost:8080/swagger-ui/index.html
 ---------------------------------------
 ### Access RabbitMQ
 RabbitMQ is used as message broker.

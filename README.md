@@ -69,6 +69,14 @@ You can access it via browser
    credentials: user: user, password: password
 ---------------------------------------
 
+### Test Brief
+- 80% of the Account Service is covered with unit and integration tests. Confirmed with Sonar
+- Some critical parts also covered with unit / integration tests, but mostly as repository tests, only reflecting understanding of the edge/positive/negative cases.
+
+- Real test`s would be set-up with the help of the Test Containers, but due to the time constraints, I have not implemented them.
+- Profiles also should be included, test could be inserted with csv / SQL files to emulate the real data and set-up profiles for the test environment.  
+- Also, I would like to implement the test with the help of the WireMock, to emulate the external services and test the application in isolation.
+
 ## Optional
 ### SonarQube Integration
 If you would like to check the quality of your code, you can integrate the project with SonarQube.

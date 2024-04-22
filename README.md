@@ -25,15 +25,27 @@ java -jar build/libs/tuum-0.0.1-SNAPSHOT.jar
 ---------------------------------------
 ### Build with Docker
 1. Build project with docker
-Start
+Start Dev
 ```bash
-docker-compose -f docker-compose.yml up --build
+docker-compose -f docker-compose.dev.yml up --build
 ```
 
-Stop
+Stop Dev
 ```bash
-docker-compose -f docker-compose.yml down
+docker-compose -f docker-compose.dev.yml down
 ````
+
+
+Start Test
+```bash
+docker-compose -f docker-compose.test.yml up --build
+```
+
+Stop test
+```bash
+docker-compose -f docker-compose.test.yml up down
+````
+Application is accessible via: http://localhost:8080/swagger-ui/index.html
 ---------------------------------------
 ### Access RabbitMQ
 RabbitMQ is used as message broker.
